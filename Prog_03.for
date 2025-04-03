@@ -1,0 +1,20 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.3, pag. 135
+C
+      REAL IX,IY,IXY,I1,I2
+      READ(*,*) I1,I2,PHIG
+C   1 FORMAT(3F10.3)
+      PHI=PHIG*3.1415926/180.
+      S=SIN(PHI)
+      C=COS(PHI)
+      IX=I1*C*C+I2*S*S
+      IY=I1*S*S+I2*C*C
+      IXY=(I1-I2)*S*C
+      WRITE(*,2) I1,I2,PHIG,IX,IY,IXY
+    2 FORMAT(10X,'VALORILE MOMENTELOR PRINCIPALE  I1=',F10.3,'  I2=',F10
+     1.3//15X,'PHI=',F8.2,10X,'IX=',F10.4,5X,'IY=',F10.4,5X,'  Y=',F10.4
+     2////)
+      STOP
+      END   

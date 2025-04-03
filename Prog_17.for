@@ -1,0 +1,25 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.17, pag. 179
+C
+      WRITE(*,1)
+    1 FORMAT(/////48X,'CALCULUL VALORII SINUSULUI INTEGRAL'/48X,35(1H=)/
+     1//28X,1HA,7X,'NR. TERM. DIN DEZV. IN SERIE   VAL. MINIMA A TERM.
+     2 VALOAREA INTEGRALEI'//)
+    2 READ(*,*,END=8) A,EPS,N
+C   3 FORMAT(2E12.6,I5)
+      T=A
+      S=0.
+      DO 4 I=1,N
+      IF(ABS(T).LT.EPS) GO TO 5
+      S=S+T
+    4 T=-T*A*A*(2*I-1)/2/I/(2*I+1)**2
+      M=N
+      GO TO 6
+    5 M=I-1
+    6 WRITE(*,7) A,M,EPS,S
+    7 FORMAT(29X,F7.3,15X,I5,13X,E12.6,9X,E14.8)
+      GO TO 2
+    8 STOP
+      END

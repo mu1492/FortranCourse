@@ -1,0 +1,30 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.20, pag. 188
+C
+      INTEGER T(24),P1,P2,DC
+      DIMENSION V(24)
+      DATA T/16,20,25,31,40,50,63,80,100,125,160,200,250,315,400,500,630
+     1,800,1000,1250,1600,2000,2500,3200/,PI/3.14159/
+      READ(*,*) L,P1,P2,VMAX
+C   1 FORMAT(3I6,F10.5)
+      WRITE(*,2) T
+    2 FORMAT(///50X,'VITEZE DE ASCHIERE LA STRUNJIRE'/50X,31(1H*)////7X,
+     124I5//)
+      ND=(L-5)/P1+(400-L)/P2+1
+      DC=5-P1
+      DO 6 I=1,ND
+      IF(DC.LT.L) GO TO 3
+      DC=DC+P2
+      GO TO 4
+    3 DC=DC+P1
+    4 DO 5 J=1,24
+      V(J)=PI/1000.*DC*T(J)
+    5 IF(V(J).GT.VMAX) V(J)=1.E+5
+    6 WRITE(*,7) DC,V
+    7 FORMAT(2X,I3,2X,7F5.1,17(1X,F4.0))
+      PRINT 8
+    8 FORMAT(/////)
+      STOP
+      END

@@ -1,0 +1,37 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.15, pag. 173
+C
+      READ(*,*) R,G,X2C,Y2C,X2B,Y2B,X1A,Y1A,PHIMAXG,PASG
+C   1 FORMAT(10F8.2)
+      PI=4.*ATAN(1.)
+      NP=PHIMAXG/PASG+1
+      WRITE(*,2)
+    2 FORMAT(///1X,131(1H*)//14X,3HPHI,7X,'X1B',7X,'Y1B',7X,'X1C',7X,
+     1'Y1C',5X,'LUNG. AB CURSA PISTON  X1I',5X,'BRAT F',4X,'BRAT G',8X,
+     2'F NECESAR'//1X,131(1H*)//) 
+      DO 3 I=1,NP
+      PHIG=(I-1)*PASG
+      PHIR=PHIG*PI/180.
+      S=SIN(PHIR)
+      C=COS(PHIR)
+      X102=R*(PHIR-S)
+      Y102=R*(1.-C)
+      X1C=X102+X2C*C+Y2C*S
+      Y1C=Y102-X2C*S+Y2C*C
+      X1B=X102+X2B*C+Y2B*S
+      Y1B=Y102-X2B*S+Y2B*C
+      AB=SQRT((X1B-X1A)**2+(Y1B-Y1A)**2)
+      IF(I.EQ.1) ABINIT=AB
+      CURSA=AB-ABINIT
+      X1I=R*PHIR
+      B2=X1I-X1C
+      B1=ABS(X1A*Y1B+X1I*Y1A-X1I*Y1B-X1B*Y1A)/AB
+      F=G*B2/B1
+    3 WRITE(*,4) I,PHIG,X1B,Y1B,X1C,Y1C,AB,CURSA,X1I,B1,B2,F
+    4 FORMAT(4X,I3,3X,10F10.5,E15.7)
+      WRITE(*,5)
+    5 FORMAT(//1X,131(1H*)////////)
+      STOP
+      END      

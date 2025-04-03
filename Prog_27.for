@@ -1,0 +1,26 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.27, pag. 211
+C
+      DIMENSION X(100),Y(100)
+      READ(*,*) N,(X(I),Y(I),I=1,N)
+C   1 FORMAT(I4/(4F15.6))
+      PI=4.*ATAN(1.)
+      PRINT 2
+    2 FORMAT(///46X,'COORDONATE CARTEZIENE',11X,
+     1'COORDONATE POLARE'/46X,21(1H=),11X,17(1H=)//
+     249X,1HX,14X,1HY,13X,2HRO,12X,'TETA'//)
+      DO 3 I=1,N
+      RO=SQRT(X(I)**2+Y(I)**2)
+      TETA=UNGHI(X(I),Y(I),PI)
+    3 WRITE(*,4) I,X(I),Y(I),RO,TETA
+    4 FORMAT(34X,I6,4E15.6)
+      STOP
+      END
+      
+      FUNCTION UNGHI(X,Y,PI)
+      UNGHI=ATAN2(Y,X)
+      IF(UNGHI.LT.0) UNGHI=2.*PI+UNGHI
+      RETURN
+      END

@@ -1,0 +1,117 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.37, pag. 259
+C
+      DIMENSION A(50),B(50),S(500)
+      COMMON /BBB/Y(500)/B012/XI,XF,C,PAS
+      EQUIVALENCE (Y(1),S(1))
+    1 READ(*,*,END=11) XI,XF,NP,NRARMON,(Y(I),I=1,NP)
+C   2 FORMAT(2F10.5,2I6/(8F10.2))
+      PI=4.*ATAN(1.)
+      PAS=(XF-XI)/(NP-1)
+      C=2.*PI/(XF-XI)
+      CALL MAXMIN(NP,VMIN,VMAX)
+      WRITE(*,3)
+    3 FORMAT(///45X,'REPREZENTAREA GRAFICA A FUNCTIEI PERIODICE'/
+     145X,42(1H=)//)
+      DO 4 I=1,NP
+      X=XI+(I-1)*PAS
+    4 CALL GRAFIC(1.2*VMIN,1.2*VMAX,X,Y(I),1.E-3)
+      CALL COEFFOUR(NP,0,AK,BK)
+      A0=AK/2.
+      DO 5 K=1,NRARMON
+    5 CALL COEFFOUR(NP,K,A(K),B(K))
+      WRITE(*,6) A0,(K,A(K),K,B(K),K=1,NRARMON)
+    6 FORMAT(///48X,'VALORILE COEFICIENTILOR SERIEI FOURIER'/
+     148X,39(1H=)//45X,'A 0 =',E13.6/(45X,'A',I2,' =',E13.6,
+     25X,'B',I2,' =',E13.6))
+      WRITE(*,7) NRARMON
+    7 FORMAT(///41X,'REPREZENTAREA GRAFICA A SUMEI PRIMELOR',
+     1I3,' ARMONICI'/41X,50(1H=)//)
+      DO 9 I=1,NP
+      X=XI+(I-1)*PAS
+      S(I)=A0
+      DO 8 K=1,NRARMON
+    8 S(I)=S(I)+A(K)*COS(K*C*X)+B(K)*SIN(K*C*X)
+    9 CALL GRAFIC(1.2*VMIN,1.2*VMAX,X,S(I),1.E-3)
+      PRINT 10
+   10 FORMAT(///////)
+      GO TO 1
+   11 STOP
+      END
+C
+      SUBROUTINE COEFFOUR(NP,K,AK,BK)
+      COMMON /B012/XI,XF,C,PAS/BBB/TAB(500)
+      PASD=2*PAS
+      NI=NP-1
+      A=K*C
+      SMA=0.
+      SCA=0.
+      SMB=0.
+      SCB=0.
+      XC=XI
+      XM=XI-PAS
+      DO 1 I=2,NI,2
+      XC=XC+PASD
+      XM=XM+PASD
+      XC1=A*XC
+      XM1=A*XM
+      SMA=SMA+TAB(I)*COS(XM1)
+      SMB=SMB+TAB(I)*SIN(XM1)
+      SCA=SCA+TAB(I+1)*COS(XC1)
+    1 SCB=SCB+TAB(I+1)*SIN(XC1)
+      AK=2./3./FLOAT(NI)*(TAB(1)*COS(A*XI)+4.*SMA+2.*SCA-
+     1TAB(NP)*COS(A*XF))
+      BK=2./3./FLOAT(NI)*(TAB(1)*SIN(A*XI)+4.*SMB+2.*SCB-
+     1TAB(NP)*SIN(A*XF))
+      RETURN
+      END
+C
+      SUBROUTINE MAXMIN(N,VMIN,VMAX)
+      COMMON /BBB/T(500)
+      VMIN=T(1)
+      VMAX=T(1)      
+      DO 1 I=1,N
+      IF(T(I).LT.VMIN) VMIN=T(I)
+      IF(T(I).GT.VMAX) VMAX=T(I)
+    1 CONTINUE
+      RETURN
+      END
+C
+      SUBROUTINE GRAFIC(VMIN,VMAX,X,Y,EPS)
+      DIMENSION A(105)
+      DATA BLANC,PUNCT,STEA,SEMN/1H ,1H.,1H*,1H-/
+      DO 1 I=1,105
+    1 A(I)=BLANC
+      IF(VMIN*VMAX) 2,3,3
+    2 TMIN=VMIN
+      TMAX=VMAX
+      GO TO 6
+    3 IF(VMIN) 4,5,5
+    4 TMIN=VMIN
+      TMAX=0.
+      GO TO 6
+    5 TMIN=0.
+      TMAX=VMAX
+    6 I=ABS(TMIN)/(TMAX-TMIN)*104+1
+      J=(Y-TMIN)/(TMAX-TMIN)*104+1
+      A(I)=PUNCT
+      A(J)=STEA
+C/    IF(IABS(I-J).LE.1) GO TO 11
+C/    IF(I-J) 7,7,8
+C/  7 I1=I+1
+C/    J1=J-1
+C/    GO TO 9
+C/  8 I1=J+1
+C/    J1=I-1
+C/  9 DO 10 K=I1,J1
+C/ 10 A(K)=SEMN
+C/ 11 CONTINUE      
+      WRITE(*,12) A,X,Y
+   12 FORMAT(1X,105A1,F10.4,E14.6)
+      IF(ABS(X).GT.EPS) GO TO 14
+      WRITE(*,13)
+   13 FORMAT('+',105(1H.))  
+   14 RETURN
+      END

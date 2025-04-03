@@ -1,0 +1,28 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.14, pag. 169
+C
+      READ(*,*) R,PHI1G,PHI2G,PASG
+      WRITE(*,4) R
+      N=(PHI2G-PHI1G)/PASG+1
+      PI=4.*ATAN(1.)
+      DO 2 I=1,N
+      PHIG=PHI1G+(I-1)*PASG
+      PHIR=PHIG*PI/180.
+      S=SIN(PHIR)
+      C=COS(PHIR)
+      X=R*(C+PHIR*S)
+      Y=R*(S-PHIR*C)
+      RO=SQRT(X*X+Y*Y)
+      TETAG=ATAN2(Y,X)*180./PI
+      IF(I.NE.1) GO TO 1
+      R1 =R*SQRT(1.+PHIR**2)
+    1 ARC=(RO*RO-R1*R1)/2./R
+    2 WRITE(*,5) I,PHIG,X,Y,RO,TETAG,ARC
+      STOP
+C   3 FORMAT(4F10.5)
+    4 FORMAT(/////55X,'RAZA CERCULUI DE BAZA =',F10.5///27X,'NR.PUNCT',
+     1 4X,'UNGHI',9X,'X',11X,'Y',10X,2HRO, 9X,'TETA',9X,3HARC//)
+    5 FORMAT(29X,I4,6F12.4)
+      END

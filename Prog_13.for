@@ -1,0 +1,35 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.13, pag. 166
+C
+    1 READ(*,*,END=7) R,B,E,TUR,PASG
+c   2 FORMAT(5F10.4)
+      WRITE(*,3) R,B,E,TUR
+    3 FORMAT(////40X,'CARACTERISTICILE MECANISMULUI BIELA-MANIVELA'/40X,
+     145(1H=)///50X,'RAZA MANIVELEI =',F14.8/50X,'LUNGIMEA BIELEI =',F13
+     2.8/50X,'EXCENTRICITATEA =',F13.8/50X,'TURATIA =',F21.8///30X,'NR.P
+     3OZ.', 2X,'UNGHIUL PHI', 3X,'SPATIUL 1', 3X,'SPATIUL 2', 4X,'VITEZA
+     4', 5X,'ACCELERATIA'//)
+      N=360./PASG+1
+      PI=4.*ATAN(1.)
+      SMAX=SQRT((R+B)**2-E*E)
+      OMEGA=PI*TUR/30.
+      DO 4 I=1,N
+      PHIG=(I-1)*PASG
+      PHIR=PHIG*PI/180.
+      S=SIN(PHIR)
+      C=COS(PHIR)
+      RAD=SQRT(B*B-(R*S+E)**2)
+      S1=R*C+RAD
+      S2=SMAX-S1
+      V=-R*OMEGA*(S+C*(R*S+E)/RAD)
+      A=-R*OMEGA**2*(C+(RAD**2*(R*C*C-R*S*S-E*S)+R*C*C*(R*S+E)**2)/RAD**
+     13)
+    4 WRITE(*,5) I,PHIG,S1,S2,V,A
+    5 FORMAT(30X,I5,3F12.4,F12.3,E15.6)
+      WRITE(*,6)
+    6 FORMAT(///////)
+      GO TO 1
+    7 STOP
+      END

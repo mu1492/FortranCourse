@@ -1,0 +1,40 @@
+C Copyright (c) 1978, Nicolae Ursu
+C
+C PROGRAMARE, INSTITUTUL POLITEHNIC CLUJ-NAPOCA, 1978
+C Programul nr.30, pag. 216
+C
+      COMPLEX FUNCTION POL(C,NC,X0)
+      COMPLEX X0
+      DIMENSION C(51) 
+      POL=(0.,0.)
+      DO 1 I=1,NC
+    1 POL=POL*X0+C(I) 
+      RETURN
+      END
+C
+      COMPLEX POL,X,Y,PS,PJ
+      DIMENSION A(51),B(51)
+      READ(*,*) OMEGAI,OMEGAF,H,EPS,NA,NB,(A(I),I=1,NA),(B(I),I=1,NB)
+C   1 FORMAT(4E12.6,2I5/(8E10.4))
+      N=(OMEGAF-OMEGAI)/H+1
+      WRITE(*,2) (I,A(I),I=1,NA),(I,B(I),I=1,NB)
+    2 FORMAT(/////45X,'VALORILE COEFICIENTILOR POLINOAMELOR'/45X,36(1H=)
+     1///(50X,I2,E25.6/))
+      PRINT 3
+    3 FORMAT(///31X,'NR.',6X,'OMEGA',15X'VALOAREA FUNCTIEI',17X,'MODUL'/
+     131X,3H===,6X,5(1H=),15X,  17(1H=),17X,5(1H=)//)
+      DO 6 I=1,N
+      X=CMPLX(0.,OMEGA)
+      PS=POL(A,NA,X)
+      PJ=POL(B,NB,X)
+      IF(CABS(PJ).LT.EPS) GO TO 6
+      OMEGA=OMEGAI+(I-1)*H
+      WRITE(*,4,ADVANCE="NO") I,OMEGA
+    4 FORMAT(28X,I6,F13.3)
+      Y=PS/PJ
+      YM=CABS(Y)
+      WRITE(*,5) Y,YM
+    5 FORMAT(1X,3E19.10)
+    6 CONTINUE
+      STOP
+      END
