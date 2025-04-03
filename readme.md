@@ -1,6 +1,7 @@
 # FORTRAN Course Samples
 
 This repository contains the sources from the book
+
 Nicolae N. Ursu - *PROGRAMARE*, Institutul Politehnic Cluj-Napoca, 1978
 
 The most recent standard at the time of writing this book was FORTRAN 66.  The input data was taken from punched cards, while the output was sent to listing paper. For being usable on current systems, the original code dealing with `stdin` and `stdout` has been adapted for console and display. 
